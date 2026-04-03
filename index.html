@@ -27,7 +27,7 @@
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
-    map.addControl(new L.Control.Fullscreen({ position: 'topleft' }));
+    
 
     var markerIcon = L.icon({
         iconUrl: 'markerIcon.png',
@@ -124,6 +124,8 @@
 
     startTracking();
     window.addEventListener("beforeunload", stopTracking);
+
+    map.addControl(new L.Control.Fullscreen({ position: 'topleft' }));
 
 </script>
 
