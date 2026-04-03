@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <title>Map</title>
 </head>
 
 <body>
@@ -34,8 +35,8 @@
     var markerBus = L.icon({
         iconUrl: 'markerBus.png',
         iconSize: [75, 65],
-        iconAnchor: [35, 32],  // half of 70, half of 65
-        popupAnchor: [0, -32], // centers popup above the icon
+        iconAnchor: [35, 32],
+        popupAnchor: [0, -32],
     });
 
     var home = L.marker([47.1259, 24.4862], { icon: markerIcon }).addTo(map);
@@ -101,7 +102,7 @@
                 const latlng = [position.coords.latitude, position.coords.longitude];
 
                 if (!userMarker) {
-                    userMarker = L.marker(latlng, { icon: markerBus }).addTo(map).bindPopup("You are here");
+                    userMarker = L.marker(latlng, { icon: markerBus }).addTo(map).bindPopup("BN 29 TCB");
                     map.setView(latlng, 15);
                 } else {
                     userMarker.setLatLng(latlng);
