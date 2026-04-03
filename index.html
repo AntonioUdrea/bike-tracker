@@ -1,123 +1,125 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-        <link rel="stylesheet" href="style.css">
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    </head>
 
-    <body>
-        <div class="map" id="map"></div>
-        
-    </body>
-    
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+
+<body>
+    <div class="map" id="map"></div>
+
+</body>
+
 
 
 <script>
-        var map = L.map('map').setView([47.132, 24.491], 14);
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }).addTo(map);
-        
-        var markerIcon = L.icon({
-                iconUrl: 'markerIcon.png',
-                iconSize: [15, 15],
-                iconAnchor: [10, 5],
-                popupAnchor: [-2, -5],
-            });
+    var map = L.map('map').setView([47.132, 24.491], 14);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
 
-        var markerBus = L.icon({
-                iconUrl: 'markerBus.png',
-                iconSize: [75, 65],
-                iconAnchor: [20, 5],
-                popupAnchor: [-10, 5],
-            });
+    var markerIcon = L.icon({
+        iconUrl: 'markerIcon.png',
+        iconSize: [15, 15],
+        iconAnchor: [10, 5],
+        popupAnchor: [-2, -5],
+    });
 
-        var home = L.marker([47.1259, 24.4862], {icon: markerIcon}).addTo(map);
-        home.bindPopup("Autobaza Panait Cerna");
+    var markerBus = L.icon({
+        iconUrl: 'markerBus.png',
+        iconSize: [70, 65],
+        iconAnchor: [35, 32],  // half of 70, half of 65
+        popupAnchor: [0, -32], // centers popup above the icon
+    });
 
-        var mk1 = L.marker([47.1269053864894, 24.485298739239322], {icon: markerIcon}).addTo(map);
-        mk1.bindPopup("BIG 1");
+    var home = L.marker([47.1259, 24.4862], { icon: markerIcon }).addTo(map);
+    home.bindPopup("Autobaza Panait Cerna");
 
-        var mk2 = L.marker([47.127125512902786, 24.48501700199349], {icon: markerIcon}).addTo(map);
-        mk2.bindPopup("BIG 2");
+    var mk1 = L.marker([47.1269053864894, 24.485298739239322], { icon: markerIcon }).addTo(map);
+    mk1.bindPopup("BIG 1");
 
-        var mk3 = L.marker([47.13168553812503, 24.488726811851812], {icon: markerIcon}).addTo(map);
-        mk3.bindPopup("Policlinica");
+    var mk2 = L.marker([47.127125512902786, 24.48501700199349], { icon: markerIcon }).addTo(map);
+    mk2.bindPopup("BIG 2");
 
-        var mk4 = L.marker([47.13298429871997, 24.487930010559626], {icon: markerIcon}).addTo(map);
-        mk4.bindPopup("Magura");
+    var mk3 = L.marker([47.13168553812503, 24.488726811851812], { icon: markerIcon }).addTo(map);
+    mk3.bindPopup("Policlinica");
 
-        var mk5 = L.marker([47.13725591052842, 24.49407765745335], {icon: markerIcon}).addTo(map);
-        mk5.bindPopup("Pasajul Decebal");
+    var mk4 = L.marker([47.13298429871997, 24.487930010559626], { icon: markerIcon }).addTo(map);
+    mk4.bindPopup("Magura");
 
-        var mk6 = L.marker([47.137993969252975, 24.491111291371656], {icon: markerIcon}).addTo(map);
-        mk6.bindPopup("Eroilor Cofetarie");
+    var mk5 = L.marker([47.13725591052842, 24.49407765745335], { icon: markerIcon }).addTo(map);
+    mk5.bindPopup("Pasajul Decebal");
 
-        var mk7 = L.marker([47.13427465942962, 24.48487897948944], {icon: markerIcon}).addTo(map);
-        mk7.bindPopup("Pasajul D. Cantemir");
+    var mk6 = L.marker([47.137993969252975, 24.491111291371656], { icon: markerIcon }).addTo(map);
+    mk6.bindPopup("Eroilor Cofetarie");
 
-        var mk8 = L.marker([47.138394382649565, 24.479928579089872], {icon: markerIcon}).addTo(map);
-        mk8.bindPopup("Leoni (capela)");
+    var mk7 = L.marker([47.13427465942962, 24.48487897948944], { icon: markerIcon }).addTo(map);
+    mk7.bindPopup("Pasajul D. Cantemir");
 
-        var mk9 = L.marker([47.135317506662915, 24.476343802791103], {icon: markerIcon}).addTo(map);
-        mk9.bindPopup("Cristiro");
+    var mk8 = L.marker([47.138394382649565, 24.479928579089872], { icon: markerIcon }).addTo(map);
+    mk8.bindPopup("Leoni (capela)");
 
-        var mk10 = L.marker([47.133643446423186, 24.473799304229583], {icon: markerIcon}).addTo(map);
-        mk10.bindPopup("Rombat");
+    var mk9 = L.marker([47.135317506662915, 24.476343802791103], { icon: markerIcon }).addTo(map);
+    mk9.bindPopup("Cristiro");
 
-        var mk11 = L.marker([47.12964643436883, 24.468903664469305], {icon: markerIcon}).addTo(map);
-        mk11.bindPopup("Schullerwald");
+    var mk10 = L.marker([47.133643446423186, 24.473799304229583], { icon: markerIcon }).addTo(map);
+    mk10.bindPopup("Rombat");
 
-        var mk12 = L.marker([47.119465231275726, 24.46221882574621], {icon: markerIcon}).addTo(map);
-        mk12.bindPopup("Enescu (Trehos)");
+    var mk11 = L.marker([47.12964643436883, 24.468903664469305], { icon: markerIcon }).addTo(map);
+    mk11.bindPopup("Schullerwald");
 
-        var mk13 = L.marker([47.11481378386459, 24.46193104235106], {icon: markerIcon}).addTo(map);
-        mk13.bindPopup("Tudor Jarda (Mercedes)");
+    var mk12 = L.marker([47.119465231275726, 24.46221882574621], { icon: markerIcon }).addTo(map);
+    mk12.bindPopup("Enescu (Trehos)");
 
-        var mk14 = L.marker([47.117319045735336, 24.467557169247186], {icon: markerIcon}).addTo(map);
-        mk14.bindPopup("Pasarela");
+    var mk13 = L.marker([47.11481378386459, 24.46193104235106], { icon: markerIcon }).addTo(map);
+    mk13.bindPopup("Tudor Jarda (Mercedes)");
 
-        var mk15 = L.marker([47.11436426253777, 24.466800222949118], {icon: markerIcon}).addTo(map);
-        mk15.bindPopup("Transmixt");
+    var mk14 = L.marker([47.117319045735336, 24.467557169247186], { icon: markerIcon }).addTo(map);
+    mk14.bindPopup("Pasarela");
 
-        var mk16 = L.marker([47.1148781174163, 24.47097784034065], {icon: markerIcon}).addTo(map);
-        mk16.bindPopup("Simpozionului (garaj autobuze electrice)");
+    var mk15 = L.marker([47.11436426253777, 24.466800222949118], { icon: markerIcon }).addTo(map);
+    mk15.bindPopup("Transmixt");
 
-        // --- Geolocation ---
-        let userMarker = null;
-        let watchId = null;
+    var mk16 = L.marker([47.1148781174163, 24.47097784034065], { icon: markerIcon }).addTo(map);
+    mk16.bindPopup("Simpozionului (garaj autobuze electrice)");
 
-        function startTracking() {
-            if (!navigator.geolocation) return;
+    // --- Geolocation ---
+    let userMarker = null;
+    let watchId = null;
 
-            watchId = navigator.geolocation.watchPosition(
-                (position) => {
-                    const latlng = [position.coords.latitude, position.coords.longitude];
+    function startTracking() {
+        if (!navigator.geolocation) return;
 
-                    if (!userMarker) {
-                        userMarker = L.marker(latlng, {icon: markerBus}).addTo(map).bindPopup("You are here");
-                        map.setView(latlng, 15);
-                    } else {
-                        userMarker.setLatLng(latlng);
-                    }
-                },
-                (error) => console.error("Geolocation error:", error.message),
-                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-            );
-        }
+        watchId = navigator.geolocation.watchPosition(
+            (position) => {
+                const latlng = [position.coords.latitude, position.coords.longitude];
 
-        function stopTracking() {
-            if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
-            if (userMarker !== null) { map.removeLayer(userMarker); userMarker = null; }
-        }
+                if (!userMarker) {
+                    userMarker = L.marker(latlng, { icon: markerBus }).addTo(map).bindPopup("You are here");
+                    map.setView(latlng, 15);
+                } else {
+                    userMarker.setLatLng(latlng);
+                }
+            },
+            (error) => console.error("Geolocation error:", error.message),
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+    }
 
-        startTracking();
-        window.addEventListener("beforeunload", stopTracking);
-        
+    function stopTracking() {
+        if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+        if (userMarker !== null) { map.removeLayer(userMarker); userMarker = null; }
+    }
+
+    startTracking();
+    window.addEventListener("beforeunload", stopTracking);
+
 </script>
+
 </html>
