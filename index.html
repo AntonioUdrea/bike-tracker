@@ -14,7 +14,7 @@
         
     </body>
     
-</html>
+
 
 <script>
         var map = L.map('map').setView([47.132, 24.491], 14);
@@ -25,6 +25,13 @@
         
         var markerIcon = L.icon({
                 iconUrl: 'markerIcon.png',
+                iconSize: [15, 15],
+                iconAnchor: [10, 5],
+                popupAnchor: [-2, -5],
+            });
+
+        var markerBus = L.icon({
+                iconUrl: 'markerBus.png',
                 iconSize: [15, 15],
                 iconAnchor: [10, 5],
                 popupAnchor: [-2, -5],
@@ -113,4 +120,4 @@
         window.addEventListener("beforeunload", stopTracking);
         
 </script>
-
+</html>
