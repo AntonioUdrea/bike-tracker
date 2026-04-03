@@ -93,7 +93,7 @@
                     const latlng = [position.coords.latitude, position.coords.longitude];
 
                     if (!userMarker) {
-                        userMarker = L.marker(latlng).addTo(map).bindPopup("You are here");
+                        userMarker = L.marker(latlng, {icon: markerBus}).addTo(map).bindPopup("You are here");
                         map.setView(latlng, 15);
                     } else {
                         userMarker.setLatLng(latlng);
