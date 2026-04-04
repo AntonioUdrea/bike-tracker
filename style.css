@@ -1,13 +1,16 @@
 @font-face {
-  font-family: DejaVuSans; 
-  src: url(DejaVuSans-Bold.ttf);
+    font-family: DejaVuSans;
+    src: url(DejaVuSans-Bold.ttf);
+}
+
+* {
+    font-family: DejaVuSans !important;
+    margin: 0;
+    padding: 0;
 }
 
 html, body {
-    margin: 0;
-    padding: 0;
     height: 100%;
-    font-family: DejaVuSans;
 }
 
 #routeScreen {
