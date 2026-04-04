@@ -27,6 +27,7 @@
         <button onclick="selectRoute('3R.geojson', 'Route 3 R')">Linia 3 Generala 6 - BIG 20:00</button>
         <button onclick="selectRoute('8T.geojson', 'Route 8 T')">Linia 8 BIG - Simpozionului 16:00</button>
         <button onclick="selectRoute('8R.geojson', 'Route 8 R')">Linia 8 Simpozionului - BIG 16:20</button>
+        <button onclick="selectRoute('test.geojson', 'GARAJ')">GARAJ</button>
     </div>
 
     <!-- MAP SCREEN -->
@@ -76,7 +77,7 @@
             .then(res => res.json())
             .then(data => {
                 routeLayer = L.geoJSON(data, {
-                    style: { color: '#000000', weight: 5, opacity: 1 },
+                    style: { color: 'black', weight: 5, opacity: 1 },
                     pointToLayer: (feature, latlng) => {
                         return L.marker(latlng, { icon: markerIcon });
                     },
