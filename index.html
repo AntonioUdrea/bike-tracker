@@ -17,22 +17,25 @@
     <!-- ROUTE SELECTION SCREEN -->
     <div id="routeScreen">
         <h1>Select Route</h1>
-        <button onclick="selectRoute('1T.geojson', 'Route 1 T')">Linia 1  BIG - Leoni 15:10</button>
-        <button onclick="selectRoute('1R.geojson', 'Route 1 R')">Linia 1  Leoni - BIG 15:40</button>
-        <button onclick="selectRoute('1BT.geojson', 'Route 1B T')">Linia 1B  BIG - Cuza Voda 18:45</button>
-        <button onclick="selectRoute('1BR.geojson', 'Route 1B R')">Linia 1B  Cuza Voda - BIG 20:00</button>
-        <button onclick="selectRoute('1T.geojson', 'Route 1C T')">Linia 1C  BIG - Leoni 15:10</button>
-        <button onclick="selectRoute('1CR.geojson', 'Route 1C R')">Linia 1C  Leoni - BIG 15:40</button>
-        <button onclick="selectRoute('3T.geojson', 'Route 3 T')">Linia 3 BIG - Generala 6 18:45</button>
-        <button onclick="selectRoute('3R.geojson', 'Route 3 R')">Linia 3 Generala 6 - BIG 20:00</button>
-        <button onclick="selectRoute('8T.geojson', 'Route 8 T')">Linia 8 BIG - Simpozionului 16:00</button>
-        <button onclick="selectRoute('8R.geojson', 'Route 8 R')">Linia 8 Simpozionului - BIG 16:20</button>
+        <button onclick="selectRoute('1T.geojson', 'Linia 1 T')">Linia 1  BIG - Leoni 15:10</button>
+        <button onclick="selectRoute('1R.geojson', 'Linia 1 R')">Linia 1  Leoni - BIG 15:40</button>
+        <button onclick="selectRoute('1BT.geojson', 'Linia 1B T')">Linia 1B  BIG - Cuza Voda 18:45</button>
+        <button onclick="selectRoute('1BR.geojson', 'Linia 1B R')">Linia 1B  Cuza Voda - BIG 20:00</button>
+        <button onclick="selectRoute('1T.geojson', 'Linia 1C T')">Linia 1C  BIG - Leoni 15:10</button>
+        <button onclick="selectRoute('1CR.geojson', 'Linia 1C R')">Linia 1C  Leoni - BIG 15:40</button>
+        <button onclick="selectRoute('3T.geojson', 'Linia 3 T')">Linia 3 BIG - Generala 6 18:45</button>
+        <button onclick="selectRoute('3R.geojson', 'Linia 3 R')">Linia 3 Generala 6 - BIG 20:00</button>
+        <button onclick="selectRoute('8T.geojson', 'Linia 8 T')">Linia 8 BIG - Simpozionului 16:00</button>
+        <button onclick="selectRoute('8R.geojson', 'Linia 8 R')">Linia 8 Simpozionului - BIG 16:20</button>
         <button onclick="selectRoute('test.geojson', 'GARAJ')">GARAJ</button>
     </div>
 
     <!-- MAP SCREEN -->
     <div id="mapScreen" style="display:none;">
         <div id="map"></div>
+        <div id="infoPanel">
+            <div id="infoPanelContent">Waiting for GPS...</div>
+        </div>
     </div>
 
 </body>
@@ -66,9 +69,11 @@
     let routeStops = [];
     let currentStopIndex = 0;
     let routeLayer = null;
+    let currentRouteName = '';
 
     // --- Route selection ---
     function selectRoute(geojsonFile, routeName) {
+        currentRouteName = routeName;
         document.getElementById('routeScreen').style.display = 'none';
         document.getElementById('mapScreen').style.display = 'block';
         map.invalidateSize();
@@ -114,12 +119,16 @@
 
                 checkStop(latlng);
                 updatePopup();
+                updatePanel();
             },
             (error) => console.error("Geolocation error:", error.message),
             { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
         );
 
-        timerInterval = setInterval(updatePopup, 5000);
+        timerInterval = setInterval(() => {
+            updatePopup();
+            updatePanel();
+        }, 5000);
     }
 
     function stopTracking() {
@@ -146,6 +155,20 @@
         }
     }
 
+    // --- Shared time status calculation ---
+    function getTimeStatus(scheduledTime) {
+        const now = new Date();
+        const [h, m] = scheduledTime.split(':').map(Number);
+        const scheduled = new Date();
+        scheduled.setHours(h, m, 0, 0);
+
+        const diffMins = Math.round((now - scheduled) / 60000);
+
+        if (Math.abs(diffMins) <= 1) return { text: 'On time', color: 'white' };
+        if (diffMins > 0) return { text: `+${diffMins} mins`, color: '#ff6b6b' };
+        return { text: `${diffMins} mins`, color: '#6bff8e' };
+    }
+
     // --- Popup: next stop + on time status ---
     function updatePopup() {
         if (!userMarker || currentStopIndex >= routeStops.length) return;
@@ -153,29 +176,29 @@
         const nextStop = routeStops[currentStopIndex];
         const scheduledTime = nextStop.properties.scheduledTime;
         const stopName = nextStop.properties.name;
-
-        const now = new Date();
-        const [h, m] = scheduledTime.split(':').map(Number);
-        const scheduled = new Date();
-        scheduled.setHours(h, m, 0, 0);
-
-        const diffMs = now - scheduled;
-        const diffMins = Math.round(diffMs / 60000);
-
-        let timeStatus;
-        if (Math.abs(diffMins) <= 1) {
-            timeStatus = 'On time';
-        } else if (diffMins > 0) {
-            timeStatus = `+${diffMins} mins`;
-        } else {
-            timeStatus = `${diffMins} mins`;
-        }
+        const status = getTimeStatus(scheduledTime);
 
         userMarker.getPopup().setContent(`
             <b>Next stop:</b> ${stopName}<br>
             <b>Scheduled:</b> ${scheduledTime}<br>
-            <b>Status:</b> ${timeStatus}
+            <b>Status:</b> ${status.text}
         `).update();
+    }
+
+    // --- Info panel ---
+    function updatePanel() {
+        if (currentStopIndex >= routeStops.length) return;
+
+        const nextStop = routeStops[currentStopIndex];
+        const scheduledTime = nextStop.properties.scheduledTime;
+        const stopName = nextStop.properties.name;
+        const status = getTimeStatus(scheduledTime);
+
+        document.getElementById('infoPanelContent').innerHTML = `
+            <b>${currentRouteName}</b> &nbsp;|&nbsp;
+            Next: <b>${stopName}</b> at <b>${scheduledTime}</b> &nbsp;|&nbsp;
+            <span style="color:${status.color}">${status.text}</span>
+        `;
     }
 
     // --- End of route ---
@@ -183,6 +206,7 @@
         stopTracking();
         routeStops = [];
         currentStopIndex = 0;
+        document.getElementById('infoPanelContent').innerHTML = 'Waiting for GPS...';
 
         document.getElementById('mapScreen').style.display = 'none';
         document.getElementById('routeScreen').style.display = 'block';
