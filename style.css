@@ -37,3 +37,19 @@ html, body {
     height: 100%;
     width: 100%;
 }
+
+#infoPanel {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    z-index: 1000;
+    font-size: 1rem;
+    text-align: center;
+    pointer-events: none;
+    white-space: nowrap;
+}
