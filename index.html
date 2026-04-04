@@ -88,28 +88,25 @@
     // --- Route state ---
     let userMarker = null;
     let watchId = null;
+    let timerInterval = null;
     let routeStops = [];
     let currentStopIndex = 0;
     let routeLayer = null;
 
     // --- Route selection ---
     function selectRoute(geojsonFile, routeName) {
-        // Show map, hide route screen
         document.getElementById('routeScreen').style.display = 'none';
         document.getElementById('mapScreen').style.display = 'block';
-        map.invalidateSize(); // recalculate map size after showing it
+        map.invalidateSize();
 
-        // Load the GeoJSON file
         fetch(geojsonFile)
             .then(res => res.json())
             .then(data => {
-                // Draw the route line on the map
                 routeLayer = L.geoJSON(data, {
                     style: { color: 'blue', weight: 4, opacity: 0.7 },
-                    pointToLayer: () => null // don't draw stop markers from GeoJSON
+                    pointToLayer: () => null
                 }).addTo(map);
 
-                // Extract stops (only Point features), sorted by id
                 routeStops = data.features
                     .filter(f => f.geometry.type === 'Point')
                     .sort((a, b) => a.id - b.id);
@@ -123,31 +120,32 @@
     function startTracking() {
         if (!navigator.geolocation) return;
 
-        watchId = setInterval(() => {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const latlng = [position.coords.latitude, position.coords.longitude];
+        // Location updates — asks permission once, streams silently after
+        watchId = navigator.geolocation.watchPosition(
+            (position) => {
+                const latlng = [position.coords.latitude, position.coords.longitude];
 
-                    // Create or move bus marker
-                    if (!userMarker) {
-                        userMarker = L.marker(latlng, { icon: markerBus }).addTo(map).bindPopup("").openPopup();
-                        map.setView(latlng, 15);
-                    } else {
-                        userMarker.setLatLng(latlng);
-                    }
+                if (!userMarker) {
+                    userMarker = L.marker(latlng, { icon: markerBus }).addTo(map).bindPopup("").openPopup();
+                    map.setView(latlng, 15);
+                } else {
+                    userMarker.setLatLng(latlng);
+                }
 
-                    // Check stops
-                    checkStop(latlng);
-                    updatePopup();
-                },
-                (error) => console.error("Geolocation error:", error.message),
-                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-            );
-        }, 5000);
+                checkStop(latlng);
+                updatePopup();
+            },
+            (error) => console.error("Geolocation error:", error.message),
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+
+        // Refresh popup every 5 seconds so +/- mins stays current
+        timerInterval = setInterval(updatePopup, 5000);
     }
 
     function stopTracking() {
-        if (watchId !== null) { clearInterval(watchId); watchId = null; }
+        if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+        if (timerInterval !== null) { clearInterval(timerInterval); timerInterval = null; }
         if (userMarker !== null) { map.removeLayer(userMarker); userMarker = null; }
         if (routeLayer !== null) { map.removeLayer(routeLayer); routeLayer = null; }
     }
@@ -163,7 +161,6 @@
         if (distance <= 30) {
             currentStopIndex++;
 
-            // End of route
             if (currentStopIndex >= routeStops.length) {
                 endRoute();
             }
@@ -175,10 +172,9 @@
         if (!userMarker || currentStopIndex >= routeStops.length) return;
 
         const nextStop = routeStops[currentStopIndex];
-        const scheduledTime = nextStop.properties.scheduledTime; // "15:10"
+        const scheduledTime = nextStop.properties.scheduledTime;
         const stopName = nextStop.properties.name;
 
-        // Calculate time difference
         const now = new Date();
         const [h, m] = scheduledTime.split(':').map(Number);
         const scheduled = new Date();
